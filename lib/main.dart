@@ -24,6 +24,7 @@ class RPG extends StatelessWidget {
   Widget build(BuildContext context) {
     return BonfireWidget(
       playerControllers: [
+        Keyboard(config: KeyboardConfig()),
         Joystick(
           directional: JoystickDirectional(),
         actions: [JoystickAction(actionId: 1),JoystickAction(actionId: 2,margin: EdgeInsets.only(bottom: 50,right: 120),color: Colors.red)]
@@ -32,7 +33,7 @@ class RPG extends StatelessWidget {
       map: WorldMapByTiled(WorldMapReader.fromAsset('map/mapa.tmj'),
           forceTileSize: Vector2(32, 32)),
       cameraConfig:
-          CameraConfig(zoom: getZoomFromMaxVisibleTile(context, 32.0, 15)),
+          CameraConfig(zoom: getZoomFromMaxVisibleTile(context, 32.0, 15),moveOnlyMapArea: true),
       backgroundColor: Color(0xFF3F3851),
       player: King(position: Vector2(300, 100)),
       globalForces: [GravityForce2D()],

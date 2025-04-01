@@ -2,29 +2,30 @@ import 'package:bonfire/bonfire.dart';
 import 'package:meurpg_/src/king_sprite.dart';
 
 class King extends PlatformPlayer with HandleForces {
+  bool moveEnable = true;
   King({required super.position})
       : super(
             size: Vector2(78.0, 58.0),
-            animation: PlatformAnimations(
-                idleRight: KingSpritesheet.idle,
-                runRight: KingSpritesheet.run,
-                jump: PlatformJumpAnimations(jumpUpRight: KingSpritesheet.jumpup, jumpDownRight: KingSpritesheet.jumpdown),
-                centerAnchor: Vector2(32, 30),
-                others: {'ground':KingSpritesheet.ground,
-                         'attack':KingSpritesheet.attack
-                }
-
-                )) {
+            animation: KingSpritesheet.animations) {
     mass = 2;
   }
 
+
+  @override
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
+    if(moveEnable){
+      super.onJoystickChangeDirectional(event);
+    }
+
+  }
   @override
   void onJoystickAction(JoystickActionEvent event) {
-    if (event.event == ActionEvent.DOWN && event.id == 1) {
+    if (event.event == ActionEvent.DOWN && (event.id == 1)) {
       jump(jumpSpeed: 200);
     }
     if (event.event == ActionEvent.DOWN && event.id == 2) {
-      animation?.playOnceOther('attack',runToTheEnd: true);
+      _execAttack();
+
     }
 
     super.onJoystickAction(event);
@@ -35,6 +36,26 @@ class King extends PlatformPlayer with HandleForces {
       animation?.playOnceOther('ground',runToTheEnd: true);
     }
     super.onJump(state);
+  }
+
+  void _execAttack(){
+    animation?.playOnceOther('attack',runToTheEnd: true,useCompFlip: true);
+    simpleAttackMelee(damage: 20, size: Vector2.all(32),direction: lastDirectionHorizontal,marginFromCenter: 15);
+  }
+
+  @override
+  void onReceiveDamage(AttackOriginEnum attacker, double damage, identify) {
+    animation?.playOnceOther('hit',runToTheEnd: true,useCompFlip: true);
+    super.onReceiveDamage(attacker, damage, identify);
+  }
+
+  @override
+  void onDie() {
+    moveEnable = false;
+    stopMove();
+
+    animation?.playOnceOther('dead',runToTheEnd: true,useCompFlip: true,onFinish: removeFromParent);
+    super.onDie();
   }
   @override
   Future<void> onLoad() {
