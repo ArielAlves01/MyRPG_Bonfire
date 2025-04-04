@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flutter/services.dart';
 import 'package:meurpg_/src/king_sprite.dart';
 
 class King extends PlatformPlayer with HandleForces {
@@ -33,7 +34,7 @@ class King extends PlatformPlayer with HandleForces {
   @override
   void onJump(JumpingStateEnum state) {
     if(state == JumpingStateEnum.idle){
-      animation?.playOnceOther('ground',runToTheEnd: true);
+      animation?.playOnceOther('ground',runToTheEnd: true,useCompFlip: true);
     }
     super.onJump(state);
   }
