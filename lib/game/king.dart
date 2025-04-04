@@ -21,10 +21,10 @@ class King extends PlatformPlayer with HandleForces {
   }
   @override
   void onJoystickAction(JoystickActionEvent event) {
-    if (event.event == ActionEvent.DOWN && (event.id == 1)) {
+    if (event.event == ActionEvent.DOWN && (event.id == 1 || event.id == LogicalKeyboardKey.space)) {
       jump(jumpSpeed: 200);
     }
-    if (event.event == ActionEvent.DOWN && event.id == 2) {
+    if (event.event == ActionEvent.DOWN && (event.id == 2 || event.id == LogicalKeyboardKey.keyZ)) {
       _execAttack();
 
     }

@@ -23,7 +23,7 @@ class Pig extends PlatformEnemy with HandleForces {
   }
 @override
   Future<void> onLoad() {
-    add(RectangleHitbox(size: Vector2.all(14),position: Vector2(7,14)));
+    add(RectangleHitbox(size: Vector2.all(14),position: Vector2(9,14)));
     return super.onLoad();
   }
 
